@@ -1,4 +1,7 @@
-<div class="sheshine-press page-width" style="{% if section.settings.background != blank %}--sheshine-press-bg: {{ section.settings.background }};{% endif %}">
+<div
+  class="sheshine-press{% if section.settings.full_width != false %} press-bar marquee-section{% endif %}"
+  style="{% if section.settings.background != blank %}--sheshine-press-bg: {{ section.settings.background }};{% endif %}"
+>
   <div class="sheshine-press__track" aria-hidden="true">
     {%- assign items = section.settings.marquee_text | split: '|' -%}
     {%- for i in (1..2) -%}
@@ -23,6 +26,12 @@
   "tag": "section",
   "class": "sheshine-press-section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width (edge to edge)",
+      "default": true
+    },
     {
       "type": "textarea",
       "id": "marquee_text",

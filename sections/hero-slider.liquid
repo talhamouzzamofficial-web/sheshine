@@ -6,11 +6,11 @@
 
 <div
   id="SheShineHero-{{ section.id }}"
-  class="sheshine-hero"
+  class="sheshine-hero{% if section.settings.full_width != false %} hero-slider{% endif %}"
   data-sheshine-hero
   data-autoplay-interval="{{ section.settings.autoplay_seconds | times: 1000 }}"
 >
-  <div class="sheshine-hero__viewport page-width">
+  <div class="sheshine-hero__viewport{% if section.settings.full_width != false %} slideshow{% endif %}">
     {%- for block in section.blocks -%}
       <div
         class="sheshine-hero__slide{% if forloop.first %} is-active{% endif %}"
@@ -87,6 +87,12 @@
   "class": "sheshine-hero-section",
   "max_blocks": 6,
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width (edge to edge)",
+      "default": true
+    },
     {
       "type": "range",
       "id": "min_height",

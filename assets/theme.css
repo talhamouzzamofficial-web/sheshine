@@ -220,7 +220,30 @@ h3,
   border-radius: var(--sheshine-radius-pill);
 }
 
-/* Hero slider */
+/* Hero slider — full viewport width (only when “Full width” is enabled in section) */
+.hero-slider,
+.hero-slider .slideshow,
+.shopify-section:has(.hero-slider) {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(-1 * (100vw - 100%) / 2);
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+}
+
+/* Press bar / marquee — full viewport width */
+.press-bar,
+.marquee-section,
+.shopify-section:has(.press-bar) {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(-1 * (100vw - 100%) / 2);
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+}
+
 .sheshine-hero {
   position: relative;
   overflow: hidden;
