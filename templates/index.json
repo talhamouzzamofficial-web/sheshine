@@ -12,17 +12,6 @@
     "hero_slider": {
       "type": "hero-slider",
       "blocks": {
-        "slide-1": {
-          "type": "slide",
-          "settings": {
-            "overlay_strength": 45,
-            "label": "NEW ARRIVAL",
-            "heading": "Refined Beauty Essentials For Everyday Rituals",
-            "subtext": "Upgrade your routine with thoughtfully chosen essentials that feel soft, luxurious, and beautifully easy to use.",
-            "button_label": "Shop Now",
-            "button_link": "shopify://collections/all"
-          }
-        },
         "slide-2": {
           "type": "slide",
           "settings": {
@@ -34,27 +23,14 @@
             "button_label": "Shop Now",
             "button_link": "shopify://collections/all"
           }
-        },
-        "slide-3": {
-          "type": "slide",
-          "settings": {
-            "overlay_strength": 45,
-            "label": "NEW ARRIVAL",
-            "heading": "Beauty That Fits Your Life",
-            "subtext": "Premium-feeling essentials without the fuss — shipped from the UK.",
-            "button_label": "Shop Now",
-            "button_link": "shopify://collections/all"
-          }
         }
       },
       "block_order": [
-        "slide-1",
-        "slide-2",
-        "slide-3"
+        "slide-2"
       ],
       "settings": {
         "full_width": true,
-        "min_height": 520,
+        "min_height": 540,
         "autoplay_seconds": 5
       }
     },
