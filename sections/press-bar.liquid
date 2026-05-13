@@ -1,0 +1,41 @@
+<div class="sheshine-press page-width" style="{% if section.settings.background != blank %}--sheshine-press-bg: {{ section.settings.background }};{% endif %}">
+  <div class="sheshine-press__track" aria-hidden="true">
+    {%- assign items = section.settings.marquee_text | split: '|' -%}
+    {%- for i in (1..2) -%}
+      {%- for item in items -%}
+        <span class="sheshine-press__item">{{ item | strip | escape }}</span>
+      {%- endfor -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{%- if section.settings.background != blank -%}
+  <style>
+    #shopify-section-{{ section.id }} .sheshine-press {
+      background: var(--sheshine-press-bg);
+    }
+  </style>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "SheShine press bar",
+  "tag": "section",
+  "class": "sheshine-press-section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "marquee_text",
+      "label": "Magazine names (use | between)",
+      "default": "COSMOPOLITAN | ELLE | GLAMOUR | Life&Style | VOGUE | HARPER'S BAZAAR"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#FFB5B5"
+    }
+  ],
+  "presets": [{ "name": "SheShine press bar" }]
+}
+{% endschema %}

@@ -1,0 +1,15 @@
+{% comment %}
+  @param rating {String} e.g. "4.9"
+  @param reviews_count {Number}
+  @param sold_text {String} e.g. "500+ sold this week"
+{% endcomment %}
+{%- assign r = rating | default: '4.9' -%}
+{%- assign rc = reviews_count | default: 221 -%}
+<div class="sheshine-social-proof">
+  <span class="sheshine-social-proof__stars" aria-hidden="true">★★★★★</span>
+  <span class="sheshine-social-proof__rating">{{ r }}</span>
+  <span class="sheshine-social-proof__reviews">({{ rc }} reviews)</span>
+  {%- if sold_text != blank -%}
+    <span class="sheshine-social-proof__sold" aria-hidden="true"> · 🔥 {{ sold_text }}</span>
+  {%- endif -%}
+</div>

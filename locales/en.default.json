@@ -527,5 +527,35 @@
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
     }
+  },
+  "sheshine": {
+    "trust": {
+      "free_delivery": "Free UK Delivery",
+      "returns": "30-Day Returns",
+      "secure": "Secure Checkout",
+      "uk_based": "UK Based"
+    },
+    "hero": {
+      "upload_image": "Upload slide image in the theme editor"
+    },
+    "featured": {
+      "pick_collection": "Select a collection in the theme editor."
+    },
+    "product": {
+      "add_to_cart": "Add to cart",
+      "choose_options": "Choose options",
+      "new_arrival": "New Arrival",
+      "you_save_html": "You save {{ pct }}%",
+      "full_description": "Full Description",
+      "shipping_returns": "Shipping & Returns",
+      "faqs": "FAQs",
+      "shipping_placeholder": "Standard UK shipping. See checkout for delivery timelines.",
+      "faq_placeholder": "Contact us for product questions — we reply within one business day."
+    },
+    "cart": {
+      "away_from_free": "You're {{ amount }} away from free UK delivery!",
+      "away_from_free_js": "You're [amount] away from free UK delivery!",
+      "unlocked_free": "You've unlocked free UK delivery on this order!"
+    }
   }
 }

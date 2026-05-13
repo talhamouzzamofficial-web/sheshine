@@ -1,0 +1,232 @@
+{{ 'component-list-payment.css' | asset_url | stylesheet_tag }}
+
+<div class="sheshine-site-footer">
+  <div class="page-width">
+    <div class="sheshine-site-footer__grid">
+      <div>
+        <a href="{{ routes.root_url }}" class="sheshine-site-footer__logo-link" aria-label="{{ shop.name }}">
+          {% render 'sheshine-logo' %}
+        </a>
+        {%- if section.settings.tagline != blank -%}
+          <p class="sheshine-site-footer__tagline">{{ section.settings.tagline | escape }}</p>
+        {%- endif -%}
+        <div class="sheshine-site-footer__social">
+          {%- if section.settings.instagram_url != blank -%}
+            <a href="{{ section.settings.instagram_url }}">Instagram</a>
+          {%- endif -%}
+          {%- if section.settings.tiktok_url != blank -%}
+            <a href="{{ section.settings.tiktok_url }}">TikTok</a>
+          {%- endif -%}
+          {%- if section.settings.facebook_url != blank -%}
+            <a href="{{ section.settings.facebook_url }}">Facebook</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'link_list' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h2 class="sheshine-site-footer__heading">{{ block.settings.heading | escape }}</h2>
+              {%- endif -%}
+              {%- if block.settings.menu != blank -%}
+                <ul class="sheshine-site-footer__menu">
+                  {%- for link in block.settings.menu.links -%}
+                    <li>
+                      <a href="{{ link.url }}">{{ link.title | escape }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+          {%- when 'newsletter' -%}
+            <div {{ block.shopify_attributes }}>
+              <h2 class="sheshine-site-footer__heading">{{ block.settings.heading | escape }}</h2>
+              {% form 'customer', class: 'sheshine-site-footer__newsletter-input' %}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <label class="visually-hidden" for="FooterNewsletter-{{ block.id }}">{{ 'newsletter.label' | t }}</label>
+                <input
+                  id="FooterNewsletter-{{ block.id }}"
+                  type="email"
+                  name="contact[email]"
+                  value="{{ form.email }}"
+                  placeholder="{{ block.settings.placeholder | escape }}"
+                  required
+                >
+                <button type="submit" class="sheshine-btn sheshine-btn--primary sheshine-btn--pill" name="commit">
+                  {{ block.settings.button_label | escape }}
+                </button>
+              {% endform %}
+            </div>
+          {%- when 'contact' -%}
+            <div {{ block.shopify_attributes }}>
+              <h2 class="sheshine-site-footer__heading">{{ block.settings.heading | escape }}</h2>
+              <p class="sheshine-site-footer__tagline">{{ block.settings.text | escape }}</p>
+              {%- if block.settings.email != blank -%}
+                <p>
+                  <a href="mailto:{{ block.settings.email }}">{{ block.settings.email | escape }}</a>
+                </p>
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="sheshine-site-footer__bottom">
+      {%- if section.settings.show_payment_icons -%}
+        <ul class="sheshine-site-footer__pay" role="list">
+          <li><span>Visa</span></li>
+          <li><span>Mastercard</span></li>
+          <li><span>PayPal</span></li>
+          <li><span>Apple Pay</span></li>
+          <li><span>Google Pay</span></li>
+          <li><span>Amex</span></li>
+        </ul>
+      {%- endif -%}
+      <p class="sheshine-site-footer__copy">
+        &copy; {{ 'now' | date: '%Y' }}
+        {{ shop.name | link_to: routes.root_url }}. {{ section.settings.copyright_note | escape }}
+      </p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "SheShine footer",
+  "tag": "footer",
+  "class": "sheshine-footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Women's Personal Care"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment method labels",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "copyright_note",
+      "label": "Copyright note",
+      "default": "All rights reserved."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Quick links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Email signup",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Subscribe to emails"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder",
+          "default": "Email address"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button",
+          "default": "Subscribe"
+        }
+      ]
+    },
+    {
+      "type": "contact",
+      "name": "Contact",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "We're here to help"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Intro text",
+          "default": "Questions? We're happy to help."
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email",
+          "default": "contact@sheshine.co.uk"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SheShine footer",
+      "blocks": [
+        {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick Links",
+            "menu": "footer"
+          }
+        },
+        {
+          "type": "link_list",
+          "settings": {
+            "heading": "Help",
+            "menu": "footer"
+          }
+        },
+        {
+          "type": "newsletter"
+        },
+        {
+          "type": "contact"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

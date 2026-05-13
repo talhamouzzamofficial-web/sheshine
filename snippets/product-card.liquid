@@ -1,0 +1,68 @@
+{% comment %}
+  @param product {Product}
+  @param lazy_load {Boolean}
+  @param section_id {String}
+{% endcomment %}
+{%- liquid
+  assign img = product.featured_media
+  assign variant = product.selected_or_first_available_variant
+-%}
+<article class="sheshine-product-card" data-product-id="{{ product.id }}">
+  <a href="{{ product.url }}" class="sheshine-product-card__media-link">
+    <div class="sheshine-product-card__media">
+      {%- if img != blank -%}
+        {% liquid
+          assign load_attr = 'lazy'
+          if lazy_load == false
+            assign load_attr = 'eager'
+          endif
+          assign img_alt = img.alt | default: product.title
+        %}
+        {{
+          img
+          | image_url: width: 800
+          | image_tag:
+            class: 'sheshine-product-card__img',
+            loading: load_attr,
+            sizes: '(min-width: 990px) 25vw, 50vw',
+            widths: '200, 400, 600, 800',
+            alt: img_alt
+        }}
+      {%- else -%}
+        {{ 'product-apparel-1' | placeholder_svg_tag: 'sheshine-product-card__placeholder' }}
+      {%- endif -%}
+      <div class="sheshine-product-card__badges">
+        {% render 'product-badge', product: product, class_prefix: 'sheshine-product-card__badge' %}
+      </div>
+    </div>
+  </a>
+  <div class="sheshine-product-card__info">
+    <h3 class="sheshine-product-card__title">
+      <a href="{{ product.url }}">{{ product.title | escape }}</a>
+    </h3>
+    <div class="sheshine-product-card__price-row">
+      {%- if variant.compare_at_price > variant.price -%}
+        <span class="sheshine-product-card__price">{{ variant.price | money }}</span>
+        <span class="sheshine-product-card__compare">{{ variant.compare_at_price | money }}</span>
+      {%- else -%}
+        <span class="sheshine-product-card__price">{{ variant.price | money }}</span>
+      {%- endif -%}
+    </div>
+    <div class="sheshine-product-card__cta">
+      {%- if product.available -%}
+        {%- if product.has_only_default_variant -%}
+          {%- form 'product', product, class: 'sheshine-product-card__form' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}">
+            <button type="submit" name="add" class="sheshine-btn sheshine-btn--accent sheshine-btn--pill sheshine-product-card__btn">
+              {{ 'sheshine.product.add_to_cart' | t }}
+            </button>
+          {%- endform -%}
+        {%- else -%}
+          <a href="{{ product.url }}" class="sheshine-btn sheshine-btn--accent sheshine-btn--pill sheshine-product-card__btn">{{ 'sheshine.product.choose_options' | t }}</a>
+        {%- endif -%}
+      {%- else -%}
+        <span class="sheshine-product-card__soldout">{{ 'products.product.sold_out' | t }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</article>

@@ -1,0 +1,358 @@
+{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+{{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign selected = product.selected_or_first_available_variant
+  assign save_pct = 0
+  if selected.compare_at_price > selected.price
+    assign save_pct = selected.compare_at_price | minus: selected.price | times: 100.0 | divided_by: selected.compare_at_price | round
+  endif
+  assign product_form_id = 'sheshine-product-form-' | append: section.id
+  assign media_limit = 5
+-%}
+
+<script>
+  window.sheshineMoneyFormat = {{ shop.money_format | json }};
+</script>
+
+<script type="application/json" id="SheshineVariants-{{ section.id }}">
+  [
+    {%- for variant in product.variants -%}
+      {
+        "id": {{ variant.id }},
+        "available": {{ variant.available | json }},
+        "price": {{ variant.price }},
+        "compare_at_price": {% if variant.compare_at_price %}{{ variant.compare_at_price }}{% else %}null{% endif %},
+        "options": {{ variant.options | json }}
+      }{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ]
+</script>
+
+<div
+  class="sheshine-product-page gradient color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding"
+  data-sheshine-product
+  data-section-id="{{ section.id }}"
+>
+  <div class="page-width">
+    <div class="sheshine-product-page__grid">
+      <div class="sheshine-product-gallery" data-sheshine-gallery>
+        <div class="sheshine-product-gallery__main" data-gallery-main>
+          {%- if product.featured_media != blank -%}
+            {% liquid
+              assign main_media = product.featured_media
+              assign main_alt = main_media.alt | default: product.title
+            %}
+            {{
+              main_media
+              | image_url: width: 1200
+              | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', widths: '400, 600, 800, 1000, 1200', alt: main_alt, class: 'sheshine-gallery-main-img'
+            }}
+          {%- else -%}
+            {{ 'product-apparel-1' | placeholder_svg_tag: '' }}
+          {%- endif -%}
+        </div>
+        {%- if product.media.size > 1 -%}
+          <div class="sheshine-product-gallery__thumbs">
+            {%- for media in product.media limit: media_limit -%}
+              {%- if media.media_type == 'image' -%}
+                <button
+                  type="button"
+                  class="sheshine-product-gallery__thumb{% if forloop.first %} is-active{% endif %}"
+                  data-gallery-thumb
+                  data-full-src="{{ media | image_url: width: 1200 }}"
+                  data-alt="{{ media.alt | default: product.title | escape }}"
+                  aria-label="{{ 'products.product.media.image_available' | t: index: forloop.index }}"
+                >
+                  {{
+                    media
+                    | image_url: width: 200
+                    | image_tag: loading: 'lazy', alt: '', widths: '100, 200', sizes: '72px'
+                  }}
+                </button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="sheshine-product-info">
+        <div class="sheshine-badge-row">
+          {% render 'product-badge', product: product %}
+          {%- if save_pct > 0 -%}
+            <span class="sheshine-save-badge">💰 Save {{ save_pct }}%</span>
+          {%- endif -%}
+          {%- if section.settings.show_new_arrival -%}
+            <span class="sheshine-badge sheshine-badge--new">✨ {{ 'sheshine.product.new_arrival' | t }}</span>
+          {%- endif -%}
+        </div>
+
+        <h1 class="sheshine-product-info__title">{{ product.title | escape }}</h1>
+
+        {% render 'social-proof',
+          rating: section.settings.rating,
+          reviews_count: section.settings.reviews_count,
+          sold_text: section.settings.sold_this_week
+        %}
+
+        <div class="sheshine-price-block" id="SheshinePrice-{{ section.id }}">
+          <span class="sheshine-price-block__current" data-sheshine-price>{{ selected.price | money }}</span>
+          <span data-sheshine-compare-wrap{% unless selected.compare_at_price > selected.price %} hidden{% endunless %}>
+            <span class="sheshine-price-block__compare" data-sheshine-compare>{{ selected.compare_at_price | money }}</span>
+          </span>
+          <span
+            class="sheshine-save-badge"
+            data-sheshine-save
+            {% unless save_pct > 0 %}hidden{% endunless %}
+          >
+            {%- if save_pct > 0 -%}
+              {{ 'sheshine.product.you_save_html' | t: pct: save_pct }}
+            {%- endif -%}
+          </span>
+        </div>
+
+        {%- if section.settings.short_description != blank -%}
+          <div class="sheshine-product-short rte">{{ section.settings.short_description }}</div>
+        {%- elsif product.description != blank -%}
+          <div class="sheshine-product-short rte">
+            {{ product.description | strip_html | truncate: 280 }}
+          </div>
+        {%- endif -%}
+
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="sheshine-variant-group" data-option-index="{{ forloop.index0 }}">
+              <p class="sheshine-variant-group__label">
+                {{ option.name }}: <strong>{{ option.selected_value }}</strong>
+              </p>
+              <div class="sheshine-variant-pills" role="group" aria-label="{{ option.name | escape }}">
+                {%- for value in option.values -%}
+                  <button
+                    type="button"
+                    class="sheshine-variant-pill{% if option.selected_value == value %} is-selected{% endif %}"
+                    data-option-value="{{ value | escape }}"
+                  >
+                    {{ value | escape }}
+                  </button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <product-form class="product-form" data-section-id="{{ section.id }}">
+          {%- form 'product',
+            product,
+            id: product_form_id,
+            class: 'form',
+            novalidate: 'novalidate',
+            data-type: 'add-to-cart-form'
+          -%}
+            <input
+              type="hidden"
+              name="id"
+              value="{{ selected.id }}"
+              class="sheshine-variant-id-input product-variant-id"
+              {% unless selected.available %}
+                disabled
+              {% endunless %}
+            >
+
+            <div class="sheshine-qty" data-sheshine-qty>
+              <button type="button" data-qty-minus aria-label="{{ 'products.product.quantity.decrease' | t }}">−</button>
+              <input
+                type="number"
+                name="quantity"
+                id="Quantity-{{ section.id }}"
+                min="1"
+                value="1"
+                form="{{ product_form_id }}"
+                aria-label="{{ 'products.product.quantity.label' | t }}"
+              >
+              <button type="button" data-qty-plus aria-label="{{ 'products.product.quantity.increase' | t }}">+</button>
+            </div>
+
+            <div class="product-form__buttons">
+              <button
+                type="submit"
+                name="add"
+                class="sheshine-btn sheshine-btn--primary sheshine-btn--pill sheshine-btn--block product-form__submit"
+                {% if selected.available == false %}
+                  disabled
+                {% endif %}
+              >
+                {{ section.settings.add_to_cart_label | escape }}
+              </button>
+              {%- if section.settings.show_dynamic_checkout -%}
+                {{ form | payment_button }}
+              {%- endif -%}
+            </div>
+          {%- endform -%}
+        </product-form>
+
+        {% render 'trust-badges' %}
+
+        <div class="sheshine-acc">
+          <div class="sheshine-acc__item">
+            <button
+              type="button"
+              class="sheshine-acc__btn"
+              data-sheshine-acc-trigger
+              aria-expanded="false"
+              aria-controls="acc-desc-{{ section.id }}"
+            >
+              <span>📋 {{ 'sheshine.product.full_description' | t }}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+            <div id="acc-desc-{{ section.id }}" class="sheshine-acc__panel rte">
+              {{ product.description }}
+            </div>
+          </div>
+          <div class="sheshine-acc__item">
+            <button
+              type="button"
+              class="sheshine-acc__btn"
+              data-sheshine-acc-trigger
+              aria-expanded="false"
+              aria-controls="acc-ship-{{ section.id }}"
+            >
+              <span>🚚 {{ 'sheshine.product.shipping_returns' | t }}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+            <div id="acc-ship-{{ section.id }}" class="sheshine-acc__panel rte">
+              {%- if section.settings.shipping_returns != blank -%}
+                {{ section.settings.shipping_returns }}
+              {%- elsif shop.shipping_policy.body != blank -%}
+                {{ shop.shipping_policy.body }}
+              {%- else -%}
+                <p>{{ 'sheshine.product.shipping_placeholder' | t }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="sheshine-acc__item">
+            <button
+              type="button"
+              class="sheshine-acc__btn"
+              data-sheshine-acc-trigger
+              aria-expanded="false"
+              aria-controls="acc-faq-{{ section.id }}"
+            >
+              <span>❓ {{ 'sheshine.product.faqs' | t }}</span>
+              <span aria-hidden="true">+</span>
+            </button>
+            <div id="acc-faq-{{ section.id }}" class="sheshine-acc__panel rte">
+              {%- if section.settings.faqs != blank -%}
+                {{ section.settings.faqs }}
+              {%- else -%}
+                <p>{{ 'sheshine.product.faq_placeholder' | t }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{% schema %}
+{
+  "name": "SheShine product",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
+    },
+    {
+      "type": "richtext",
+      "id": "short_description",
+      "label": "Short description override"
+    },
+    {
+      "type": "text",
+      "id": "rating",
+      "label": "Rating display",
+      "default": "4.9"
+    },
+    {
+      "type": "number",
+      "id": "reviews_count",
+      "label": "Review count",
+      "default": 221
+    },
+    {
+      "type": "text",
+      "id": "sold_this_week",
+      "label": "Sold this week text",
+      "default": "500+ sold this week"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_new_arrival",
+      "label": "Show New Arrival badge",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_label",
+      "label": "Add to cart button",
+      "default": "Add to Cart — Start My Routine ✨"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show dynamic checkout (Buy now)",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "shipping_returns",
+      "label": "Shipping & Returns content"
+    },
+    {
+      "type": "richtext",
+      "id": "faqs",
+      "label": "FAQs content"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ]
+}
+{% endschema %}

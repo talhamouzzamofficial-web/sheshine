@@ -1,0 +1,45 @@
+{% comment %}
+  Renders bestseller / new / top-rated from product tags (case-insensitive).
+  @param product {Product}
+  @param class_prefix {String} optional CSS class prefix
+{% endcomment %}
+{%- liquid
+  assign badge_type = ''
+  assign badge_label = ''
+  assign badge_modifier = ''
+
+  for tag in product.tags
+    assign t = tag | downcase | strip
+    if t == 'bestseller'
+      assign badge_type = 'bestseller'
+      assign badge_label = '⭐ Bestseller'
+      assign badge_modifier = 'sheshine-badge--bestseller'
+      break
+    endif
+  endfor
+  if badge_type == ''
+    for tag in product.tags
+      assign t = tag | downcase | strip
+      if t == 'new'
+        assign badge_type = 'new'
+        assign badge_label = 'New'
+        assign badge_modifier = 'sheshine-badge--new'
+        break
+      endif
+    endfor
+  endif
+  if badge_type == ''
+    for tag in product.tags
+      assign t = tag | downcase | strip
+      if t == 'top-rated' or t == 'top rated'
+        assign badge_type = 'top-rated'
+        assign badge_label = 'Top rated'
+        assign badge_modifier = 'sheshine-badge--top-rated'
+        break
+      endif
+    endfor
+  endif
+-%}
+{%- if badge_type != '' -%}
+  <span class="sheshine-badge {{ badge_modifier }} {{ class_prefix }}">{{ badge_label }}</span>
+{%- endif -%}

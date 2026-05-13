@@ -1,4 +1,19 @@
+# SheShine — Dawn child theme (UK personal care)
+
+This repository extends [Shopify Dawn](https://github.com/Shopify/dawn) with SheShine branding: burgundy and salmon palette, CRO-focused product and home sections, custom footer, and `assets/theme.css` + `assets/theme.js`.
+
+**Setup**
+
+1. In **Online Store → Navigation**, create or assign menus: `main-menu` (Home, Shop Now, Face Care, …) and `footer` (policies + help links).
+2. Tag products with `bestseller`, `new`, or `top-rated` for badges; add a **logo** in theme settings or rely on the text wordmark when no logo image is set.
+3. Upload hero slide images under **Theme editor → Hero slider**.
+
+The notes below are the upstream Dawn README.
+
+---
+
 # Dawn
+
 
 [![Build status](https://github.com/shopify/dawn/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Shopify/dawn/actions/workflows/ci.yml?query=branch%3Amain)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=informational)](/.github/CONTRIBUTING.md)
