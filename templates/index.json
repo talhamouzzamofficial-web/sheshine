@@ -11,10 +11,6 @@
   "sections": {
     "hero_slider": {
       "type": "hero-slider",
-      "settings": {
-        "min_height": 520,
-        "autoplay_seconds": 5
-      },
       "blocks": {
         "slide-1": {
           "type": "slide",
@@ -30,6 +26,7 @@
         "slide-2": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/ChatGPT_Image_May_13_2026_11_20_03_PM.png",
             "overlay_strength": 45,
             "label": "NEW ARRIVAL",
             "heading": "Your Daily Glow Starts Here",
@@ -50,11 +47,21 @@
           }
         }
       },
-      "block_order": ["slide-1", "slide-2", "slide-3"]
+      "block_order": [
+        "slide-1",
+        "slide-2",
+        "slide-3"
+      ],
+      "settings": {
+        "full_width": true,
+        "min_height": 520,
+        "autoplay_seconds": 5
+      }
     },
     "press_bar": {
       "type": "press-bar",
       "settings": {
+        "full_width": true,
         "marquee_text": "COSMOPOLITAN | ELLE | GLAMOUR | Life&Style | VOGUE | HARPER'S BAZAAR",
         "background": "#ffb5b5"
       }
@@ -73,11 +80,6 @@
     },
     "why_sheshine": {
       "type": "why-sheshine",
-      "settings": {
-        "heading": "Why Women Love SheShine",
-        "padding_top": 48,
-        "padding_bottom": 48
-      },
       "blocks": {
         "f1": {
           "type": "feature",
@@ -112,33 +114,55 @@
           }
         }
       },
-      "block_order": ["f1", "f2", "f3", "f4"]
+      "block_order": [
+        "f1",
+        "f2",
+        "f3",
+        "f4"
+      ],
+      "settings": {
+        "heading": "Why Women Love SheShine",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     },
     "bestseller_highlight": {
       "type": "bestseller-highlight",
-      "settings": {
-        "title": "Flawless Facial Hair Remover",
-        "badge": "⭐ #1 Bestseller",
-        "button_label": "Shop Now — £5.99",
-        "social_proof": "🔥 847 sold this week",
-        "padding_top": 48,
-        "padding_bottom": 48
-      },
       "blocks": {
         "b1": {
           "type": "bullet",
-          "settings": { "text": "Gentle on sensitive skin" }
+          "settings": {
+            "text": "Gentle on sensitive skin"
+          }
         },
         "b2": {
           "type": "bullet",
-          "settings": { "text": "Compact for on-the-go touch-ups" }
+          "settings": {
+            "text": "Compact for on-the-go touch-ups"
+          }
         },
         "b3": {
           "type": "bullet",
-          "settings": { "text": "Loved by thousands of UK customers" }
+          "settings": {
+            "text": "Loved by thousands of UK customers"
+          }
         }
       },
-      "block_order": ["b1", "b2", "b3"]
+      "block_order": [
+        "b1",
+        "b2",
+        "b3"
+      ],
+      "settings": {
+        "product": "",
+        "title": "Flawless Facial Hair Remover",
+        "badge": "⭐ #1 Bestseller",
+        "button_label": "Shop Now — £5.99",
+        "button_link": "",
+        "social_proof": "🔥 847 sold this week",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     },
     "sheshine_newsletter": {
       "type": "sheshine-home-newsletter",
