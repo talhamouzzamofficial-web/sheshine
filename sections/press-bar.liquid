@@ -1,14 +1,36 @@
 <div
-  class="sheshine-press{% if section.settings.full_width != false %} press-bar marquee-section{% endif %}"
+  class="sheshine-press{% if section.settings.full_width != false %} marquee-section{% endif %}"
   style="{% if section.settings.background != blank %}--sheshine-press-bg: {{ section.settings.background }};{% endif %}"
 >
-  <div class="sheshine-press__track" aria-hidden="true">
-    {%- assign items = section.settings.marquee_text | split: '|' -%}
-    {%- for i in (1..2) -%}
-      {%- for item in items -%}
-        <span class="sheshine-press__item">{{ item | strip | escape }}</span>
-      {%- endfor -%}
-    {%- endfor -%}
+  <div class="press-bar">
+    <div class="marquee-track">
+      <div class="marquee-inner">
+        <span>COSMOPOLITAN</span>
+        <span class="marquee-dot">✦</span>
+        <span>ELLE</span>
+        <span class="marquee-dot">✦</span>
+        <span>GLAMOUR</span>
+        <span class="marquee-dot">✦</span>
+        <span>LIFE&amp;STYLE</span>
+        <span class="marquee-dot">✦</span>
+        <span>VOGUE</span>
+        <span class="marquee-dot">✦</span>
+        <span>HARPER'S BAZAAR</span>
+        <span class="marquee-dot">✦</span>
+        <span>COSMOPOLITAN</span>
+        <span class="marquee-dot">✦</span>
+        <span>ELLE</span>
+        <span class="marquee-dot">✦</span>
+        <span>GLAMOUR</span>
+        <span class="marquee-dot">✦</span>
+        <span>LIFE&amp;STYLE</span>
+        <span class="marquee-dot">✦</span>
+        <span>VOGUE</span>
+        <span class="marquee-dot">✦</span>
+        <span>HARPER'S BAZAAR</span>
+        <span class="marquee-dot">✦</span>
+      </div>
+    </div>
   </div>
 </div>
 

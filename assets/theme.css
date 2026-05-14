@@ -217,16 +217,85 @@ h3,
   overflow: hidden;
 }
 
-/* Press bar / marquee — full viewport width */
-.press-bar,
-.marquee-section,
-.shopify-section:has(.press-bar) {
+/* === PRESS BAR MARQUEE === */
+.press-bar {
+  background-color: #FFB5B5;
   width: 100vw;
   max-width: 100vw;
   margin-left: calc(-1 * (100vw - 100%) / 2);
-  padding-left: 0;
-  padding-right: 0;
+  padding: 18px 0;
   overflow: hidden;
+  position: relative;
+}
+
+.marquee-track {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: max-content;
+  animation: marqueeScroll 25s linear infinite;
+  white-space: nowrap;
+}
+
+.marquee-inner span {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #ffffff;
+  text-shadow: 0px 1px 3px rgba(122, 31, 61, 0.4);
+  padding: 0 32px;
+  text-transform: uppercase;
+}
+
+.marquee-inner .marquee-dot {
+  color: #7a1f3d;
+  font-size: 12px;
+  padding: 0 4px;
+  letter-spacing: 0;
+  opacity: 0.8;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause on hover */
+.press-bar:hover .marquee-inner {
+  animation-play-state: paused;
+}
+
+/* Fade edges for infinite feel */
+.marquee-track::before,
+.marquee-track::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee-track::before {
+  left: 0;
+  background: linear-gradient(to right, #FFB5B5, transparent);
+}
+
+.marquee-track::after {
+  right: 0;
+  background: linear-gradient(to left, #FFB5B5, transparent);
 }
 
 .sheshine-hero {
@@ -392,39 +461,6 @@ h3,
   object-fit: cover;
   position: absolute;
   inset: 0;
-}
-
-/* Press marquee */
-.sheshine-press {
-  background: var(--sheshine-accent);
-  padding: 1.4rem 0;
-  overflow: hidden;
-}
-
-.sheshine-press__track {
-  display: flex;
-  width: max-content;
-  animation: sheshine-marquee 32s linear infinite;
-}
-
-.sheshine-press__item {
-  flex: 0 0 auto;
-  padding: 0 3rem;
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--sheshine-primary);
-  white-space: nowrap;
-}
-
-@keyframes sheshine-marquee {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
 }
 
 /* Featured products */
@@ -1181,23 +1217,6 @@ footer.footer {
 }
 
 /* === TEXT VISIBILITY FIXES === */
-
-/* Press bar marquee - white text on salmon pink */
-.press-bar,
-.marquee-section {
-  background-color: #ffb5b5;
-}
-
-.press-bar .marquee-text,
-.press-bar span,
-.press-bar p,
-.marquee-section span,
-.marquee-section p,
-.sheshine-press span {
-  color: #7a1f3d !important;
-  font-weight: 700;
-  letter-spacing: 3px;
-}
 
 /* Footer - all text on salmon pink */
 .sheshine-footer,
